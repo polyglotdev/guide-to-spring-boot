@@ -7,12 +7,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecommenderImplementation {
 
-  @Autowired
-  @Qualifier("CBF")
-  private Filter contentBasedFilter;
+  private Filter filter;
 
-  public String [] recommendMovies (String movie) {
-    System.out.println("\nName of the filter in use: " + contentBasedFilter + "\n");
-    return contentBasedFilter.getRecommendations("Finding Dory");
+  //constructor injection
+  @Autowired
+  public RecommenderImplementation(@Qualifier("collaborativeFilter") Filter filter) {
+    super();
+    this.filter = filter;
+    System.out.println("Constructor invoked...");
   }
+
+  //use the injected filter to find recommendations
+  public String [] recommendMovies (String movie) {
+
+    //print the name of interface implementation being used
+    System.out.println("\nName of the filter in use: " + filter + "\n");
+    return filter.getRecommendations("Finding Dory");
+  }
+
 }
