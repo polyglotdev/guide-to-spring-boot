@@ -1,5 +1,5 @@
 package com.domhallan.movierecommendersystem.lesson7;
 
 public interface Filter {
-  public String[] getRecommendations(String movie);
+  String[] getRecommendations(String movie);
 }
