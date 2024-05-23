@@ -1,11 +1,13 @@
 package com.domhallan.movierecommendersystem.lesson6;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
  * Collaborative filtering implementation of the Filter interface
  */
 @Component
+@Qualifier("CF")
 public class CollaborativeFilter implements Filter {
 
   /**
