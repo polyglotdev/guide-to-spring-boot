@@ -1,4 +1,4 @@
-package com.domhallan.movierecommendersystem.lesson5;
+package com.domhallan.movierecommendersystem.lesson4;
 
 public interface Filter {
   public String[] getRecommendations(String movie);

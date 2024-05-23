@@ -1,4 +1,4 @@
-package com.domhallan.movierecommendersystem.lesson4;
+package com.domhallan.movierecommendersystem.lesson5;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

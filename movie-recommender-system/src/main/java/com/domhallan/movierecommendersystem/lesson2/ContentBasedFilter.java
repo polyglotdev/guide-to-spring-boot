@@ -1,4 +1,4 @@
-package com.domhallan.movierecommendersystem.lesson5;
+package com.domhallan.movierecommendersystem.lesson2;
 
 import org.springframework.stereotype.Component;
 
