@@ -1,4 +1,4 @@
-package com.domhallan.movierecommendersystem.lesson6;
+package com.domhallan.movierecommendersystem.lesson7;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
