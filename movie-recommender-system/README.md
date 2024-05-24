@@ -227,3 +227,91 @@ public class MovieRecommenderSystemApplication {
 ### Spring vs. Gang of Four singleton[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/4548361560784896#Spring-vs-Gang-of-Four-singleton)
 
 It is important to note that there is a difference between the Spring singleton and the Gang of Four (GoF) singleton design patterns. The singleton design pattern as specified by the GoF means one bean per JVM. However, in Spring it means one bean per application context. By the GoF definition, even if there were more than one application contexts running on the same JVM, there would still be only one instance of the singleton class.
+
+---
+
+### Issues from Bean Scope Lesson:
+
+My code is printing both `content-based filter constructor called` and `collaborative filter constructor called` messages. However, the instructor's output only shows the `content-based filter constructor called` message. Why is this happening?
+
+1. **Default Bean Scope**:
+   - By default, Spring beans are singleton-scoped. This means that a single instance of the bean is created and shared throughout the application context.
+2. **Prototype Scope**:
+   - Beans with prototype scope are created anew each time they are requested from the application context.
+
+### My Current Setup:
+
+- **ContentBasedFilter**:
+   - This bean is singleton-scoped by default because you did not specify a different scope.
+   - The constructor is called when the application context is initialized.
+- **CollaborativeFilter**:
+   - This bean is prototype-scoped as specified by `@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)`.
+   - The constructor is called each time the bean is requested from the application context.
+
+### Instructor's Output:
+
+The instructor's output only shows the `content-based filter constructor called` message. This suggests that the `CollaborativeFilter` bean was not requested during the application startup, hence its constructor was not called.
+
+### Your Output:
+
+Your output shows both `content-based filter constructor called` and `collaborative filter constructor called`. This indicates that both beans were instantiated during the application startup.
+
+### Explanation:
+
+1. **Application Context Initialization**:
+   - When the Spring application context is initialized, it creates instances of all singleton-scoped beans. This is why the `ContentBasedFilter` constructor is called.
+2. **Prototype Bean Request**:
+   - The `CollaborativeFilter` constructor is called because the bean is requested during the application startup. This could be due to some code in your application that explicitly requests the `CollaborativeFilter` bean.
+### Verifying the Bean Requests:
+
+To understand why both constructors are being called, you should check the `MovieRecommenderSystemApplication` class and any other configuration classes or components that might be requesting these beans.
+
+### Steps to Align with Instructor's Output:
+
+1. **Check Bean Requests**:
+   - Ensure that the `CollaborativeFilter` bean is not being requested during the application startup. This includes checking any `@Autowired` fields, `@Bean` methods, or explicit `getBean` calls in your configuration.
+2. **Modify `MovieRecommenderSystemApplication`**:
+   - Comment out or remove any code that requests the `CollaborativeFilter` bean during startup.
+
+Here is the modified `MovieRecommenderSystemApplication` class for reference:
+
+```java
+package com.domhallan.movierecommendersystem.lesson8;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class MovieRecommenderSystemApplication {
+
+    public static void main(String[] args) {
+        // ApplicationContext manages the beans and dependencies
+        ApplicationContext appContext = SpringApplication.run(MovieRecommenderSystemApplication.class, args);
+
+        // Retrieve singleton bean from application context thrice
+         ContentBasedFilter cbf1 = appContext.getBean(ContentBasedFilter.class);
+         ContentBasedFilter cbf2 = appContext.getBean(ContentBasedFilter.class);
+         ContentBasedFilter cbf3= appContext.getBean(ContentBasedFilter.class);
+
+        // Retrieve prototype bean from application context thrice
+         CollaborativeFilter cf1 = appContext.getBean(CollaborativeFilter.class);
+         CollaborativeFilter cf2 = appContext.getBean(CollaborativeFilter.class);
+         CollaborativeFilter cf3 = appContext.getBean(CollaborativeFilter.class);
+
+        // Print the beans to verify
+         System.out.println(cf1);
+         System.out.println(cf2);
+         System.out.println(cf3);
+    }
+}
+```
+
+### Conclusion:
+
+- **Singleton Beans**: Created during application context initialization.
+- **Prototype Beans**: Created when explicitly requested.
+
+By ensuring that the `CollaborativeFilter` bean is not requested during 
+startup, you should see only the `content-based filter constructor called` 
+message, aligning my output with the instructor's.
