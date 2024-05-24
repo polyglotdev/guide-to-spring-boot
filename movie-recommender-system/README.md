@@ -141,3 +141,89 @@ As can be verified from the output, all beans are the same. The application cont
 ![Singleton Bean Scope](./src/main/resources/images/bean-application-context.svg)
 
 Singleton bean scope is the default scope. It is used to minimize the number of objects created. Beans are created when the context is loaded and cached in memory. All requests for a bean are returned with the same memory address. This type of scope is best suited for cases where stateless beans are required. On the contrary, prototype bean scope is used when we need to maintain the state of the beans.
+
+### Prototype scope[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/4548361560784896#Prototype-scope)
+
+Now we will change the scope of the `CollaborativeFilter` bean from 
+singleton to prototype. For this, we will use the `@Scope` annotation and 
+import `org.springframework.context.annotation.Scope` and `org.
+springframework.beans.factory.config.ConfigurableBeanFactory`. We can 
+specify the scope in the two ways. `@Scope("prototype")` or `@Scope
+(ConfigurableBeanFactory.SCOPE_PROTOTYPE)`. Here is the updated code:
+
+```java
+package com.domhallan.movierecommendersystem.lesson8;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+/**
+ * Collaborative filtering implementation of the Filter interface
+ */
+@Component
+@Scope("prototype")
+public class CollaborativeFilter implements Filter {
+
+   /**
+    * Provides movie recommendations based on collaborative filtering.
+    *
+    * @param movie - the movie for which recommendations are needed.
+    * @return array of recommended movie titles.
+    */
+   public String[] getRecommendations(String movie) {
+      //logic of content based filter
+      return new String[] {"Happy Feet", "Ice Age", "Shark Tale"};
+   }
+}
+```
+
+```shell
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-24T08:13:45.775-04:00  INFO 19928 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Starting MovieRecommenderSystemApplication using Java 17.0.7 with PID 19928 (/Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system/target/classes started by domhallan in /Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system)
+2024-05-24T08:13:45.777-04:00  INFO 19928 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : No active profile set, falling back to 1 default profile: "default"
+Constructor invoked...
+Setter method invoked..
+2024-05-24T08:13:45.954-04:00  INFO 19928 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Started MovieRecommenderSystemApplication in 0.295 seconds (process running for 0.478)
+com.domhallan.movierecommendersystem.lesson8.ContentBasedFilter@4564e94b
+com.domhallan.movierecommendersystem.lesson8.ContentBasedFilter@4564e94b
+com.domhallan.movierecommendersystem.lesson8.ContentBasedFilter@4564e94b
+com.domhallan.movierecommendersystem.lesson8.CollaborativeFilter@45673f68
+com.domhallan.movierecommendersystem.lesson8.CollaborativeFilter@27abb83e
+com.domhallan.movierecommendersystem.lesson8.CollaborativeFilter@69e308c6
+
+Process finished with exit code 0
+````
+
+This time the application context will return three different objects. It will create a new object every time we invoke the getBean() method.
+
+![Prototype Bean Scope](./src/main/resources/images/prototype-bean-creation.svg)
+
+Spring creates a singleton bean even before we ask for it while a prototype bean is not created till we request Spring for the bean. In the code widget below, we will print a message in the `ContentBasedFilter` and `CollaborativeFilter` constructors and comment everything in the main method. When the application is run, the output shows that Spring has created a `ContentBasedFilter` bean but the CollaborativeFilter bean has not yet been created.
+
+```java
+package com.domhallan.movierecommendersystem.lesson8;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class MovieRecommenderSystemApplication {
+
+	public static void main(String[] args) {
+		//ApplicationContext manages the beans and dependencies
+		ApplicationContext appContext = SpringApplication.run(MovieRecommenderSystemApplication.class, args);
+  }
+}
+```
+
+### Spring vs. Gang of Four singleton[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/4548361560784896#Spring-vs-Gang-of-Four-singleton)
+
+It is important to note that there is a difference between the Spring singleton and the Gang of Four (GoF) singleton design patterns. The singleton design pattern as specified by the GoF means one bean per JVM. However, in Spring it means one bean per application context. By the GoF definition, even if there were more than one application contexts running on the same JVM, there would still be only one instance of the singleton class.
