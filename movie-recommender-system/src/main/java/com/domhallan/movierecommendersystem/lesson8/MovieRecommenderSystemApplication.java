@@ -1,4 +1,4 @@
-package com.domhallan.movierecommendersystem.lesson7;
+package com.domhallan.movierecommendersystem.lesson8;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
