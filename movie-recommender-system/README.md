@@ -333,3 +333,48 @@ In this lesson, we will discuss an interesting problem of mixing bean scopes. So
 The `ContentBasedFilter` bean has singleton scope because we need only one instance of the filter. However, the `Movie` bean has prototype scope because we need more than one objects of this class.
 
 ![Singleton Bean with Prototype Dependency](./src/main/resources/images/singleton-with-proto-deps.svg)
+
+```shell
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-24T09:26:38.055-04:00  INFO 24315 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Starting MovieRecommenderSystemApplication using Java 17.0.7 with PID 24315 (/Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system/target/classes started by domhallan in /Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system)
+2024-05-24T09:26:38.057-04:00  INFO 24315 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : No active profile set, falling back to 1 default profile: "default"
+content-based filter constructor called
+Movie constructor called
+2024-05-24T09:26:38.233-04:00  INFO 24315 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Started MovieRecommenderSystemApplication in 0.299 seconds (process running for 0.478)
+
+ContentBasedFilter bean with singleton scope
+com.domhallan.movierecommendersystem.lesson9.ContentBasedFilter@3b8ee898
+
+Movie bean with prototype scope
+com.domhallan.movierecommendersystem.lesson9.Movie@7d151a
+com.domhallan.movierecommendersystem.lesson9.Movie@7d151a
+com.domhallan.movierecommendersystem.lesson9.Movie@7d151a
+
+ContentBasedFilter instances created: 1
+Movie instances created: 1
+```
+
+The output of the above code shows that the same `Movie` bean is returned 
+every time. Moreover, the number of instances of the prototype bean created 
+is one instead of three. A singleton bean is created when the context is 
+loaded. The `Movie` constructor was called by Spring when it was creating the `ContentBasedFilter` bean. The prototype bean injected into the singleton bean at the time of creation of the singleton bean when the container initializes it. This explains the following messages in the output:
+
+```log
+ContentBasedFilter constructor called
+Movie constructor called
+```
+
+> 🧠 When a prototype bean is injected into a singleton bean, it loses its prototype behavior and acts as a singleton.
+
+The same instance of the bean is returned by the application context every 
+time it is requested using the `getMovie()` method.
+
+![Spring container](./src/main/resources/images/spring-container.svg)
