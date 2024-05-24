@@ -325,3 +325,11 @@ We'll cover the following:
 - Singleton bean with prototype dependency
 - Proxy
 - `@Lookup` annotation
+
+## Singleton bean with prototype dependency[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/4828164167827456#Singleton-bean-with-prototype-dependency)
+
+In this lesson, we will discuss an interesting problem of mixing bean scopes. Sometimes, a bean has singleton scope but its dependency has prototype scope. An example is the content-based filter which recommends movies based on item-to-item similarity. Our basic implementation of the content-based filter compares different movies and assigns a similarity score. Hence, `Movie` is a dependency of the `ContentBasedFilter` class.
+
+The `ContentBasedFilter` bean has singleton scope because we need only one instance of the filter. However, the `Movie` bean has prototype scope because we need more than one objects of this class.
+
+![Singleton Bean with Prototype Dependency](./src/main/resources/images/singleton-with-proto-deps.svg)
