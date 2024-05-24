@@ -378,3 +378,57 @@ The same instance of the bean is returned by the application context every
 time it is requested using the `getMovie()` method.
 
 ![Spring container](./src/main/resources/images/spring-container.svg)
+
+## Proxy[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/4828164167827456#Proxy)
+
+Right now, Spring cannot inject the prototype bean into the singleton bean after it has been created. This problem can be solved in a number of ways. One of them is by using a **proxy**. We declare the bean with prototype scope as a proxy using the `proxyMode` element inside the `@Scope` annotation.
+
+`@Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode=ScopedProxyMode.TARGET_CLASS)`
+
+In Spring, when a prototype bean is required in a singleton
+bean, a proxy object is autowired instead of directly wiring the
+prototype bean. This proxy serves as an intermediary,
+ensuring that each time the prototype bean is requested, the
+Spring container dynamically provides a fresh instance to the
+singleton bean through the proxy, enabling the creation of a
+new prototype bean instance upon each method call on the proxy.
+
+```shell
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-24T09:39:58.309-04:00  INFO 43594 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Starting MovieRecommenderSystemApplication using Java 17.0.7 with PID 43594 (/Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system/target/classes started by domhallan in /Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system)
+2024-05-24T09:39:58.311-04:00  INFO 43594 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : No active profile set, falling back to 1 default profile: "default"
+content-based filter constructor called
+2024-05-24T09:39:58.492-04:00  INFO 43594 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Started MovieRecommenderSystemApplication in 0.299 seconds (process running for 0.495)
+
+ContentBasedFilter bean with singleton scope
+com.domhallan.movierecommendersystem.lesson9.ContentBasedFilter@6d64b553
+
+Movie bean with prototype scope
+Movie constructor called
+com.domhallan.movierecommendersystem.lesson9.Movie@796d3c9f
+Movie constructor called
+com.domhallan.movierecommendersystem.lesson9.Movie@6bff19ff
+Movie constructor called
+com.domhallan.movierecommendersystem.lesson9.Movie@41e1455d
+
+ContentBasedFilter instances created: 1
+Movie instances created: 3
+
+Process finished with exit code 0
+```
+
+As can be seen from the output, the singleton bean constructor is called when the `ContentBasedFilter` object is initialized, but the `Movie` constructor isn’t called at that time. The `Movie` constructor is called whenever the proxy object gets used (as in the `println` statements in lines **25–27**).
+
+## @Lookup[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/4828164167827456#Lookup)
+
+Another method is by using the `@Lookup` annotation on the `getMovie()` method. This annotation tells Spring to return an instance of `Movie` type. It is essentially the same as `beanFactory.getBean(Movie.class)`.
+
+One thing to consider is that singleton scope minimizes the number of objects created so the scope should only be changed where necessary. If there are more objects, there will be an impact on the memory used as well as on garbage collection.
