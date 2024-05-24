@@ -1,5 +1,6 @@
-package com.domhallan.movierecommendersystem.lesson8;
+package com.domhallan.movierecommendersystem.lesson9;
 
+import com.domhallan.movierecommendersystem.lesson8.Filter;
 import org.springframework.stereotype.Component;
 
 
