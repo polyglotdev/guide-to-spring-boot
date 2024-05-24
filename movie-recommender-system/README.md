@@ -315,3 +315,13 @@ public class MovieRecommenderSystemApplication {
 By ensuring that the `CollaborativeFilter` bean is not requested during 
 startup, you should see only the `content-based filter constructor called` 
 message, aligning my output with the instructor's.
+
+# Mixing Bean Scope
+
+Learn what happens when the dependency of a singleton bean has prototype scope and how to get the correct output.
+
+We'll cover the following:
+
+- Singleton bean with prototype dependency
+- Proxy
+- `@Lookup` annotation
