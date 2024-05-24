@@ -12,14 +12,23 @@ public class MovieRecommenderSystemApplication {
 		//ApplicationContext manages the beans and dependencies
 		ApplicationContext appContext = SpringApplication.run(MovieRecommenderSystemApplication.class, args);
 
-		//Retrieve singleton bean from application context thrice
-		//	ContentBasedFilter cbf1 = appContext.getBean(ContentBasedFilter.class);
-		//	ContentBasedFilter cbf2 = appContext.getBean(ContentBasedFilter.class);
-		//	ContentBasedFilter cbf3= appContext.getBean(ContentBasedFilter.class);
+		//Retrieve singleton bean from application context
+		ContentBasedFilter filter = appContext.getBean(ContentBasedFilter.class);
+		System.out.println("\nContentBasedFilter bean with singleton scope");
+		System.out.println(filter);
 
-		//Retrieve prototype bean from application context thrice
-		//	CollaborativeFilter cf1 = appContext.getBean(CollaborativeFilter.class);
-		//	CollaborativeFilter cf2 = appContext.getBean(CollaborativeFilter.class);
-		//	CollaborativeFilter cf3 = appContext.getBean(CollaborativeFilter.class);
+		//Retrieve prototype bean from the singleton bean thrice
+		Movie movie1 = filter.getMovie();
+		Movie movie2 = filter.getMovie();
+		Movie movie3 = filter.getMovie();
+
+		System.out.println("\nMovie bean with prototype scope");
+		System.out.println(movie1);
+		System.out.println(movie2);
+		System.out.println(movie3);
+
+		//Print number of instances of each bean
+		System.out.println("\nContentBasedFilter instances created: " + ContentBasedFilter.getInstances());
+		System.out.println("Movie instances created: "+ Movie.getInstances());
 	}
 }
