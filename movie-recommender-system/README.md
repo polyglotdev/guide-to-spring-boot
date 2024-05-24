@@ -81,7 +81,63 @@ The **default scope** of a bean is **singleton**, in which **only one instance o
 
 In our movie recommendation system example, we have two implementations of the `Filter` interface, namely `ContentBasedFilter` and `CollaborativeFilter`. We will use them to show the differences between singleton and prototype bean scope.
 
-For the code example shown in this lesson, we have created a sub-package called `lesson8` inside the package `io.datajek.spring.basics.movierecommendersystem`. The package contains `MovieRecommenderSystemApplication.java`, `Filter.java`, `ContentBasedFilter.java`, and `CollaborativeFilter.java` files.
+For the code example shown in this lesson, we have created a sub-package called `lesson8` inside the package `com.domhallan.movierecommendersystem`. The package contains `MovieRecommenderSystemApplication.java`, `Filter.java`, `ContentBasedFilter.java`, and `CollaborativeFilter.java` files.
 
 Application context manages the beans, and we can retrieve a bean using the 
 `getBean()` method. If we request the application context for the `ContentBasedFilter` bean three times as shown, we get the same bean:
+
+```java
+package com.domhallan.movierecommendersystem.lesson8;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class MovieRecommenderSystemApplication {
+
+	public static void main(String[] args) {
+		
+		//ApplicationContext manages the beans and dependencies
+		ApplicationContext appContext = SpringApplication.run(MovieRecommenderSystemApplication.class, args);
+
+		//Retrieve singleton bean from application context thrice
+		ContentBasedFilter cbf1 = appContext.getBean(ContentBasedFilter.class);	
+		ContentBasedFilter cbf2 = appContext.getBean(ContentBasedFilter.class);	
+		ContentBasedFilter cbf3= appContext.getBean(ContentBasedFilter.class);	
+					
+		System.out.println(cbf1);
+		System.out.println(cbf2);
+		System.out.println(cbf3);
+	}
+}
+```
+
+Output:
+
+```shell
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-05-24T08:03:53.781-04:00  INFO 6384 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Starting MovieRecommenderSystemApplication using Java 17.0.7 with PID 6384 (/Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system/target/classes started by domhallan in /Users/domhallan/learning/educative/guide-to-spring-boot/movie-recommender-system)
+2024-05-24T08:03:53.782-04:00  INFO 6384 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : No active profile set, falling back to 1 default profile: "default"
+Constructor invoked...
+Setter method invoked..
+2024-05-24T08:03:53.953-04:00  INFO 6384 --- [movie-recommender-system] [           main] .d.m.l.MovieRecommenderSystemApplication : Started MovieRecommenderSystemApplication in 0.291 seconds (process running for 0.528)
+com.domhallan.movierecommendersystem.lesson8.ContentBasedFilter@3b8ee898
+com.domhallan.movierecommendersystem.lesson8.ContentBasedFilter@3b8ee898
+com.domhallan.movierecommendersystem.lesson8.ContentBasedFilter@3b8ee898
+
+Process finished with exit code 0
+```
+As can be verified from the output, all beans are the same. The application context did not create a new bean when we requested it the second and third time. Rather, it returned the reference to the bean already created. Pictorially, it can be shown as follows:
+
+![Singleton Bean Scope](./src/main/resources/images/bean-application-context.svg)
+
+Singleton bean scope is the default scope. It is used to minimize the number of objects created. Beans are created when the context is loaded and cached in memory. All requests for a bean are returned with the same memory address. This type of scope is best suited for cases where stateless beans are required. On the contrary, prototype bean scope is used when we need to maintain the state of the beans.
