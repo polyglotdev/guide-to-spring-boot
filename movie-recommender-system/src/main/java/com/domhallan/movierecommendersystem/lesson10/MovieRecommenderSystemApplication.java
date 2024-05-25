@@ -1,5 +1,7 @@
-package com.domhallan.movierecommendersystem.lesson9;
+package com.domhallan.movierecommendersystem.lesson10;
 
+import com.domhallan.movierecommendersystem.lesson9.ContentBasedFilter;
+import com.domhallan.movierecommendersystem.lesson9.Movie;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
