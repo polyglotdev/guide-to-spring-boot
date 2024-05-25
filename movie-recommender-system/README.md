@@ -473,11 +473,21 @@ public class MovieRecommenderSystemApplication {
 }
 ```
 
-## `@ComponentScan` for specific package[](https://www.educative.
-io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/5531348880326656#ComponentScan-for-specific-package)
+## `@ComponentScan` for specific package[](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/5531348880326656#ComponentScan-for-specific-package)
 
 We need to guide Spring to search the `com.domhallan.movierecommendersystem.
 lesson10` package and its sub-packages for beans. We can do this by using 
 the `@ComponentScan` annotation and providing the base package as an argument.
 
 ```java
+
+## What is Spring Boot?
+
+Spring Boot is a framework that simplifies the development of Java applications. It provides a set of tools and conventions that allow developers to create production-ready applications quickly and with minimal configuration.
+
+### Key Features of Spring Boot
+
+1. **Auto-Configuration**: Spring Boot automatically configures the application based on the dependencies present in the classpath. This eliminates the need for manual configuration and reduces boilerplate code.
+2. **Standalone**: Spring Boot applications can be run as standalone JAR files, making deployment and execution simple.
+3. **Embedded Servers**: Spring Boot includes embedded servers like Tomcat, Jetty, and Undertow, allowing applications to be deployed without the need for an external server.
+4. **Production-Ready**: Spring Boot provides features like health checks, metrics, and externalized configuration that make applications production-ready out of the box.
