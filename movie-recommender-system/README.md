@@ -432,3 +432,52 @@ As can be seen from the output, the singleton bean constructor is called when th
 Another method is by using the `@Lookup` annotation on the `getMovie()` method. This annotation tells Spring to return an instance of `Movie` type. It is essentially the same as `beanFactory.getBean(Movie.class)`.
 
 One thing to consider is that singleton scope minimizes the number of objects created so the scope should only be changed where necessary. If there are more objects, there will be an impact on the memory used as well as on garbage collection.
+
+## `@ComponentScan` Annotation
+
+Spring does a component scan to search for the beans that it manages. In a Spring application, the `@ComponentScan` annotation without any argument tells Spring to scan the current package as well as any sub-packages that might exist. Spring detects all classes marked with the `@Component`, `@Repository`, `@Service`, and `@Controller` annotations during component scan.
+
+## `@SpringBootApplication`[#](https://www.educative.io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/5531348880326656#SpringBootApplication)
+
+In a Spring application, `@ComponentScan` is used along with the `@Configuration` annotation. In a Spring Boot application, component scan happens implicitly. The `@SpringBootApplication` annotation is a combination of three annotations:
+
+- `@Configuration`
+- `@EnableAutoConfiguration`
+- `@ComponentScan`
+
+`@SpringBootApplication` by default, searches the package where it is present, as well as all the sub-packages. If a bean is present in a package other than the base package or its sub-packages, it will not be found. If we want Spring to find beans defined in other packages, we need to use the `@ComponentScan` annotation and provide the path of the package where we want Spring to look for the beans.
+
+> 💡The `MovieRecommenderSystemApplication` class has the
+> `@SpringBootApplication` annotation which means that com.domhallan.
+> movierecommendersystem.lesson9 and its subpackages will be scanned for
+> beans. The `containsBean()` method which will return a `Boolean` value, is
+> used to check if the bean is found during component scanning.
+
+```java
+package com.domhallan.movierecommendersystem.lesson9;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class MovieRecommenderSystemApplication {
+
+	public static void main(String[] args) {
+
+		//ApplicationContext manages the beans and dependencies
+		ApplicationContext appContext = SpringApplication.run(MovieRecommenderSystemApplication.class, args);
+		System.out.println("ContentBasedFilter bean found = " + appContext.containsBean("contentBasedFilter"));
+		System.out.println("CollaborativeFilter bean found = " + appContext.containsBean("collaborativeFilter"));
+	}
+}
+```
+
+## `@ComponentScan` for specific package[](https://www.educative.
+io/module/page/O7rwGNTE1LJD4RVVx/10370001/5666917543313408/5531348880326656#ComponentScan-for-specific-package)
+
+We need to guide Spring to search the `com.domhallan.movierecommendersystem.
+lesson10` package and its sub-packages for beans. We can do this by using 
+the `@ComponentScan` annotation and providing the base package as an argument.
+
+```java
